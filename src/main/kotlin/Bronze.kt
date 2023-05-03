@@ -44,10 +44,12 @@ class Problem14467 { // 13분
                 record[cow] = moveDirect
             }
             else {
-                val preciousDirect = record[cow]
+                val previousDirect = record[cow]
                 // 이전에 있었던 방향과 이동한 방향이 다르다면 길을 건넌 것이므로 cnt+1
-                if(preciousDirect != moveDirect)
+                if(previousDirect != moveDirect) {
                     moveCount++
+                    record[cow] = moveDirect
+                }
             }
         }
         print(moveCount)
