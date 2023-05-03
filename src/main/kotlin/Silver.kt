@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.math.max
 
 // Silver 2
 class Problem1874 {
@@ -113,3 +114,29 @@ class Problem2217 {
     }
 }
 
+// Silver 4(Greedy) - 40 min
+class Problem1758 {
+    fun solve() {
+        val n = readln().toInt()
+        val tipList = mutableListOf<Int>()
+        for(i in 0 until n) {
+            val tip = readln().toInt()
+            tipList.add(tip)
+        }
+        tipList.sortDescending()    // 내림차순 정렬
+        val sumOfTip = getSumOfTip(n, tipList)
+        print(sumOfTip)
+    }
+
+    private fun getSumOfTip(n: Int, tipList: List<Int>): Long {
+        var sumOfTip: Long = 0
+        for(i in 0 until n) {
+            var decidedTip = tipList[i] - (i+1 - 1)
+            if(decidedTip < 0)
+                decidedTip = 0
+
+            sumOfTip += decidedTip
+        }
+        return sumOfTip
+    }
+}
