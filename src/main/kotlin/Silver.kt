@@ -43,7 +43,7 @@ class Problem1874 {
 }
 
 
-// Silver 5 - 40min
+// Silver 5(Greedy) - 40min
 class Problem14916 {
     fun solve() {
 
@@ -89,3 +89,27 @@ class Problem14916 {
         print(answerCoinNum)
     }
 }
+
+// Silver 4(Greedy) - 28min
+class Problem2217 {
+    fun solve() {
+        val n = readln().toInt()
+        val lopeList = mutableListOf<Int>()
+        for(i in 0 until n) {
+            val lope = readln().toInt()
+            lopeList.add(lope)
+        }
+        lopeList.sortDescending() // 내림차순 정렬
+
+        var weight = 0
+        var maxWeight = 0
+        for(i in lopeList.indices) {
+            weight = lopeList[i] * (i+1)
+            if(maxWeight < weight)
+                maxWeight = weight
+        }
+
+        print(maxWeight)
+    }
+}
+
