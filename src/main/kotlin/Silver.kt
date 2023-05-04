@@ -140,3 +140,5 @@ class Problem1758 {
         return sumOfTip
     }
 }
+
+// 잔디 심기 오류
