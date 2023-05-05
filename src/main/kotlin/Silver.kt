@@ -1,6 +1,4 @@
 import java.util.*
-import kotlin.math.max
-
 // Silver 2
 class Problem1874 {
 
@@ -141,4 +139,51 @@ class Problem1758 {
     }
 }
 
-// 잔디 심기 오류
+// Silver 3(Greedy) - 1 hour over.. (58점)
+class Problem13305 {
+    fun solve() {
+        val distanceList = mutableListOf<Int>()
+        val oilPriceList = mutableListOf<Int>()
+
+        // input
+        val scanner = Scanner(System.`in`)
+        val n = scanner.nextInt()
+        for(i in 0 until n-1) {
+            val distance = scanner.nextInt()
+            distanceList.add(distance)
+        }
+        distanceList.add(0)
+        for(i in 0 until n) {
+            val oilPrice = scanner.nextInt()
+            oilPriceList.add(oilPrice)
+        }
+
+        val answer = getAnswer(oilPriceList, distanceList)
+        print(answer)
+    }
+
+    private fun getAnswer(oilList: List<Int>, distanceList: List<Int>): Long {
+        var answerSum: Long = 0
+        var minOilIndex = oilList.size
+        do {
+            val rangeOilList = oilList.subList(0, minOilIndex)      // 0부터 최소값의 인덱스까지의 리스트를 추출한다.
+            val rangeDistanceList = distanceList.subList(0, minOilIndex)
+            val minOilPrice = rangeOilList.min()
+            minOilIndex = rangeOilList.indexOf(minOilPrice)  // 최소값의 인덱스를 구해준다.
+
+            val sumOfDistance = getDistanceSum(rangeDistanceList, minOilIndex)
+            answerSum += minOilPrice * sumOfDistance
+        } while(minOilIndex != 0)
+
+        return answerSum
+    }
+
+    private fun getDistanceSum(distanceList: List<Int>, startIndex: Int): Long { // 시작 인덱스포함부터 끝까지 더하기
+        var sum:Long = 0
+        for(i in startIndex until distanceList.size) {
+            sum += distanceList[i]
+        }
+
+        return sum
+    }
+}
