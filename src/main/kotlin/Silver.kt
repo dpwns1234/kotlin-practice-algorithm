@@ -141,49 +141,47 @@ class Problem1758 {
 
 // Silver 3(Greedy) - 1 hour over.. (58점)
 class Problem13305 {
+    private val scr = Scanner(System.`in`)
     fun solve() {
-        val distanceList = mutableListOf<Int>()
+        val n = scr.nextInt()
         val oilPriceList = mutableListOf<Int>()
+        val distanceList = mutableListOf<Int>()
 
         // input
-        val scanner = Scanner(System.`in`)
-        val n = scanner.nextInt()
-        for(i in 0 until n-1) {
-            val distance = scanner.nextInt()
+        input(n, oilPriceList, distanceList)
+
+        var currentOilPrice = oilPriceList[0]
+        var answerSum: Long = 0
+        for(i in 1 until n) {
+            // 다음 도시로 이동. 후 오일 가격을 바꿔준다.
+            if(currentOilPrice > oilPriceList[i]) {
+                answerSum += currentOilPrice * distanceList[i-1].toLong()
+                currentOilPrice = oilPriceList[i]
+            }
+            // 현재 오일이 다음 것보다 작으면 그 다음 도시까지 간다.
+            else {
+                answerSum += currentOilPrice * distanceList[i-1].toLong()
+            }
+        }
+
+        print(answerSum)
+
+    }
+
+    private fun input(
+        n: Int,
+        oilPriceList: MutableList<Int>,
+        distanceList: MutableList<Int>
+    ) {
+        for (i in 0 until n - 1) {
+            val distance = scr.nextInt()
             distanceList.add(distance)
         }
-        distanceList.add(0)
-        for(i in 0 until n) {
-            val oilPrice = scanner.nextInt()
+
+        for (i in 0 until n) {
+            val oilPrice = scr.nextInt()
             oilPriceList.add(oilPrice)
         }
-
-        val answer = getAnswer(oilPriceList, distanceList)
-        print(answer)
     }
 
-    private fun getAnswer(oilList: List<Int>, distanceList: List<Int>): Long {
-        var answerSum: Long = 0
-        var minOilIndex = oilList.size
-        do {
-            val rangeOilList = oilList.subList(0, minOilIndex)      // 0부터 최소값의 인덱스까지의 리스트를 추출한다.
-            val rangeDistanceList = distanceList.subList(0, minOilIndex)
-            val minOilPrice = rangeOilList.min()
-            minOilIndex = rangeOilList.indexOf(minOilPrice)  // 최소값의 인덱스를 구해준다.
-
-            val sumOfDistance = getDistanceSum(rangeDistanceList, minOilIndex)
-            answerSum += minOilPrice * sumOfDistance
-        } while(minOilIndex != 0)
-
-        return answerSum
-    }
-
-    private fun getDistanceSum(distanceList: List<Int>, startIndex: Int): Long { // 시작 인덱스포함부터 끝까지 더하기
-        var sum:Long = 0
-        for(i in startIndex until distanceList.size) {
-            sum += distanceList[i]
-        }
-
-        return sum
-    }
 }
