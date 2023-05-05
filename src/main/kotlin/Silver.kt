@@ -185,3 +185,19 @@ class Problem13305 {
     }
 
 }
+
+// Silver 3 - 25 min (Greedy)
+class Problem20115 {
+    fun solve() {
+        val scr = Scanner(System.`in`)
+        val n = scr.nextLong()
+        val amountList = mutableListOf<Long>()
+        for(i in 0 until n) amountList.add(scr.nextLong())
+
+        // 제일 큰 용량을 제외한 값들의 합 / 2를 해준다. (결합법칙)
+        val restAmount = (amountList.sum() - amountList.max()).toDouble() / 2
+        // 제일 큰 용량 + 절반씩 잃은 것들의 합
+        val answer = amountList.max() + restAmount
+        print(answer)
+    }
+}
