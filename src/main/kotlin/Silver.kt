@@ -201,3 +201,37 @@ class Problem20115 {
         print(answer)
     }
 }
+
+// Silver 2 - 35 min (Greedy)
+class Problem1541 {
+    fun solve() {
+        var answerSum = 0
+        val str = readln()
+        val numList = str.split('+', '-')
+        val signList = mutableListOf<Char>()
+        for(ch in str) {
+            if (ch == '+' || ch == '-')
+                signList.add(ch)
+        }
+
+        answerSum = numList[0].toInt()
+        for(i in signList.indices) {
+            if(signList[i] == '+')
+                answerSum += numList[i+1].toInt()
+            else {
+                answerSum -= minusSum(numList, i+1)
+                break
+            }
+        }
+
+        print(answerSum)
+    }
+
+    private fun minusSum(numList: List<String>, startIndex: Int): Int {
+        var sum = 0
+        for(i in startIndex until numList.size) {
+            sum += numList[i].toInt()
+        }
+        return sum
+    }
+}
