@@ -1,4 +1,6 @@
 import java.util.*
+import kotlin.math.log10
+
 // Silver 2
 class Problem1874 {
 
@@ -233,5 +235,80 @@ class Problem1541 {
             sum += numList[i].toInt()
         }
         return sum
+    }
+}
+
+// Silver 2 - 50 min (Greedy)
+class Problem16953 {
+    fun solve() {
+        var answerCnt = 1
+        val str = readln().split(" ")
+        val a = str[0].toInt()
+        var b = str[1].toInt()
+
+        while(b > a) {
+            val lastNumber = b % 10 // 일의 자리 숫자 구하기
+            if(lastNumber == 1) { // 마지막 수가 1인 경우
+                b = b / 10 // 일의 자리 수 없애기
+            }
+            else {
+                if(b % 2 == 0)
+                    b /= 2
+                else
+                    break   // 2로 나눌 수 없을 경우 실패
+            }
+            answerCnt++
+        }
+
+        // 결국 b를 a로 만드는데 성공했다면 성공!
+        if(a == b)
+            print(answerCnt)
+        else
+            print("-1")
+    }
+}
+
+class Problem1931 {
+    fun solve() {
+        var answerCount = 0
+        val n = readln().toInt()
+        var timeTable = mutableMapOf<Int, Int>()
+        for(i in 0 until n) {
+            val str = readln().split(" ")
+            val startTime = str[0].toInt()
+            var endTime = str[1].toInt()
+
+            // 시작 시간이 같은 회의라면
+            timeTable[startTime]?.let {
+                // 끝나는 시간이 더 빨리 끝난다면, 원래 값을 유지시켜준다.
+                if(it < endTime)
+                    endTime = it
+            }
+            timeTable[startTime] = endTime
+        }
+
+        val lastMeeting = timeTable.maxBy { it.value }.value
+        // 전 회의의 끝나는 시간이 제일 마지막 회의시간의 끝나는 시간과 같아지면 종료
+        do {
+            val lastMeetingEndTime = timeTable.minBy { it.value }.value // endTime이 가장 작은 값을 가져온다.
+            // 전 회의시간의 끝나는 시간보다 늦게 시작하는 회의만을 골라내 timeTable을 만든다.
+            timeTable = getNewTimeTable(timeTable, lastMeetingEndTime)
+            // 회의가 끝나는 시간이 가장 작은 회의를 골라낸다.
+            answerCount++
+        } while(lastMeetingEndTime != lastMeeting)
+
+        print(answerCount)
+    }
+
+    private fun getNewTimeTable(oldMap: Map<Int, Int>, minValue: Int):MutableMap<Int, Int> {
+        val newMap = mutableMapOf<Int, Int>()
+        for(startTime in oldMap.keys) {
+            // 전 회의시간의 끝나는 시간보다 시작시간이 같거나 큰 회의만 추가
+            if(startTime >= minValue) {
+                newMap.put(startTime, oldMap[startTime]!!)
+            }
+        }
+
+        return newMap
     }
 }
