@@ -268,47 +268,39 @@ class Problem16953 {
     }
 }
 
+// Silver 1 - 1hour 30min (Greedy)
 class Problem1931 {
     fun solve() {
-        var answerCount = 0
-        val n = readln().toInt()
-        var timeTable = mutableMapOf<Int, Int>()
-        for(i in 0 until n) {
-            val str = readln().split(" ")
-            val startTime = str[0].toInt()
-            var endTime = str[1].toInt()
+        var answerCount = 1
+        val timeTable = input()
+        timeTable.sortWith(compareBy ({ it.second }, {it.first})) // 끝나는 시간이 작은 순으로 정렬 + 시작 시간이 같으면 그것도 오름차순으로 정렬
 
-            // 시작 시간이 같은 회의라면
-            timeTable[startTime]?.let {
-                // 끝나는 시간이 더 빨리 끝난다면, 원래 값을 유지시켜준다.
-                if(it < endTime)
-                    endTime = it
-            }
-            timeTable[startTime] = endTime
-        }
-
-        val lastMeeting = timeTable.maxBy { it.value }.value
+        var previousMeeting = timeTable[0]
         // 전 회의의 끝나는 시간이 제일 마지막 회의시간의 끝나는 시간과 같아지면 종료
-        do {
-            val lastMeetingEndTime = timeTable.minBy { it.value }.value // endTime이 가장 작은 값을 가져온다.
-            // 전 회의시간의 끝나는 시간보다 늦게 시작하는 회의만을 골라내 timeTable을 만든다.
-            timeTable = getNewTimeTable(timeTable, lastMeetingEndTime)
-            // 회의가 끝나는 시간이 가장 작은 회의를 골라낸다.
-            answerCount++
-        } while(lastMeetingEndTime != lastMeeting)
-
+        for(index in 1 until timeTable.size) {
+            val meetingStartTime = timeTable[index].first
+            // 전 미팅의 끝나는 시간이 그 다음 미팅 시작시간이랑 겹치지 않으면 그 회의로 결정!
+            if (previousMeeting.second > meetingStartTime) // 시간이 겹침
+                continue
+            else {
+                previousMeeting = timeTable[index]
+                answerCount++
+            }
+        }
         print(answerCount)
     }
 
-    private fun getNewTimeTable(oldMap: Map<Int, Int>, minValue: Int):MutableMap<Int, Int> {
-        val newMap = mutableMapOf<Int, Int>()
-        for(startTime in oldMap.keys) {
-            // 전 회의시간의 끝나는 시간보다 시작시간이 같거나 큰 회의만 추가
-            if(startTime >= minValue) {
-                newMap.put(startTime, oldMap[startTime]!!)
-            }
-        }
+    private fun input(): MutableList<Pair<Int, Int>> {
+        val n = readln().toInt()
+        val timeTable = mutableListOf<Pair<Int, Int>>()
+        for (i in 0 until n) {
+            val str = readln().split(" ")
+            val startTime = str[0].toInt()
+            val endTime = str[1].toInt()
 
-        return newMap
+            val meeting = Pair(startTime, endTime)
+            timeTable.add(meeting)
+        }
+        return timeTable
     }
 }
