@@ -1,5 +1,5 @@
 import java.util.*
-import kotlin.math.log10
+import kotlin.math.pow
 
 // Silver 2
 class Problem1874 {
@@ -302,5 +302,59 @@ class Problem1931 {
             timeTable.add(meeting)
         }
         return timeTable
+    }
+}
+
+// Silver2 - 2 hour (Greedy)
+class Problem21314 {
+    private val ZERO = "0"
+    private val ONE = "1"
+    fun solve() {
+        val str = readln()
+        val maxMK = getMaxMK(str)
+        val minMK = getMinMK(str)
+        println(maxMK + "\n" + minMK)
+
+    }
+
+    private fun getMaxMK(str:String): String {
+        val MKNumber = StringBuilder("")
+        var cnt = 0
+
+        for(ch in str) {
+            if(ch == 'M') {
+                cnt++
+            }
+            else if(ch == 'K') {
+                val temp = "5" + ZERO.repeat(cnt)
+                MKNumber.append(temp)
+                cnt = 0
+            }
+        }
+        if(str.last() == 'M') {
+            val temp = ONE.repeat(cnt)
+            MKNumber.append(temp)
+        }
+
+        return MKNumber.toString()
+    }
+    private fun getMinMK(str: String): String {
+        val MKNumber = StringBuilder("")
+        var flag = false
+        for(ch in str) {
+            if(ch == 'M' && !flag) {
+                MKNumber.append('1')
+                flag = true
+            }
+            else if (ch == 'M' && flag) {
+                MKNumber.append('0')
+            }
+            else if (ch == 'K') {
+                MKNumber.append('5')
+                flag = false
+            }
+        }
+
+        return MKNumber.toString()
     }
 }
