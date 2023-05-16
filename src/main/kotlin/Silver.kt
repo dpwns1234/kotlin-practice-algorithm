@@ -106,51 +106,26 @@ class Problem1758 {
     }
 }
 
-// Silver 3(Greedy) - 1 hour over.. (58점)
+// Silver 3(Greedy) - 1 hour over.. (resolve 25min)
 class Problem13305 {
-    private val scr = Scanner(System.`in`)
     fun solve() {
-        val n = scr.nextInt()
-        val oilPriceList = mutableListOf<Int>()
-        val distanceList = mutableListOf<Int>()
+        var costSum: Long = 0
+        val n = readln().toInt()
+        val distanceList = readln().split(" ")
+        val oilCostList = readln().split(" ")
 
-        // input
-        input(n, oilPriceList, distanceList)
-
-        var currentOilPrice = oilPriceList[0]
-        var answerSum: Long = 0
-        for(i in 1 until n) {
-            // 다음 도시로 이동. 후 오일 가격을 바꿔준다.
-            if(currentOilPrice > oilPriceList[i]) {
-                answerSum += currentOilPrice * distanceList[i-1].toLong()
-                currentOilPrice = oilPriceList[i]
+        var lowCost = oilCostList[0].toLong()
+        for(i in distanceList.indices) {
+            val oilCost = oilCostList[i].toLong()
+            val distance = distanceList[i].toLong()
+            if(oilCost < lowCost) {
+                lowCost = oilCost
             }
-            // 현재 오일이 다음 것보다 작으면 그 다음 도시까지 간다.
-            else {
-                answerSum += currentOilPrice * distanceList[i-1].toLong()
-            }
+
+            costSum += (lowCost * distance)
         }
-
-        print(answerSum)
-
+        print(costSum)
     }
-
-    private fun input(
-        n: Int,
-        oilPriceList: MutableList<Int>,
-        distanceList: MutableList<Int>
-    ) {
-        for (i in 0 until n - 1) {
-            val distance = scr.nextInt()
-            distanceList.add(distance)
-        }
-
-        for (i in 0 until n) {
-            val oilPrice = scr.nextInt()
-            oilPriceList.add(oilPrice)
-        }
-    }
-
 }
 
 // Silver 3 - 25 min (Greedy)
