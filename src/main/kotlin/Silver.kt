@@ -47,47 +47,22 @@ class Problem1874 {
 // Silver 5(Greedy) - 40min
 class Problem14916 {
     fun solve() {
-
         val money = readln().toInt()
-        val coinNum5 = money / 5
-        var coinNum2 = 0
-        var answerCoinNum = 0
 
-        // money가 짝수면 5를 짝수 배로
-        if(money % 2 == 0) {
-            if(coinNum5 % 2 == 0) {
-                coinNum2 = (money % 5) / 2
-                answerCoinNum = coinNum5 + coinNum2
-            }
-            // 5원 동전을 하나 빼고 계산한다.
-            else {
-                coinNum2 = (money % 5 + 5) / 2
-                answerCoinNum = coinNum5-1 + coinNum2
-            }
-        }
-        // money가 홀수면 5를 홀수 배로
+        var coinNum = money / 5
+        var restMoney = money % 5
+        if(restMoney % 2 == 0)
+            coinNum += (restMoney / 2)
         else {
-            // 5원 동전을 하나 뺴고, 계산한다.
-            if(coinNum5 % 2 == 0) {
-                coinNum2 = (money % 5 + 5) / 2
-                answerCoinNum = coinNum5-1 + coinNum2
-            }
-            else {
-                coinNum2 = (money % 5) / 2
-                answerCoinNum = coinNum5 + coinNum2
-            }
+            coinNum -= 1 // 5원을 덜 사용했기 떄문에
+            restMoney += 5
+            coinNum += (restMoney / 2)
         }
 
-        if(money < 5 && money % 2 != 0)
-            answerCoinNum = -1
+        if(money == 1 || money == 3)
+            coinNum = -1
 
-
-        // 짝수 - 짝수 - 짝수 = 짝수 Or 짝수 - 홀수 - 짝수 = 홀수
-        // 홀수 - 짝수 - 짝수 = 홀수 Or 홀수 - 홀수 - 짝수 = 짝수
-        // 즉, money가 짝수면 5를 짝수로, money가 홀수면 5를 홀수로 만들어주면 됨.
-        // 단, money가 5 미만이면 조절을 못함. 그 경우만 -1을 리턴
-
-        print(answerCoinNum)
+        print(coinNum)
     }
 }
 
