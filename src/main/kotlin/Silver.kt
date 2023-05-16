@@ -84,30 +84,25 @@ class Problem2217 {
     }
 }
 
-// Silver 4(Greedy) - 40 min
+// Silver 4(Greedy) - 40 min (resolve 22min)
 class Problem1758 {
     fun solve() {
+        var answerTip: Long = 0
+        val tipList = mutableListOf<Long>()
         val n = readln().toInt()
-        val tipList = mutableListOf<Int>()
         for(i in 0 until n) {
-            val tip = readln().toInt()
-            tipList.add(tip)
+            tipList.add(readln().toLong())
         }
-        tipList.sortDescending()    // 내림차순 정렬
-        val sumOfTip = getSumOfTip(n, tipList)
-        print(sumOfTip)
-    }
+        tipList.sortDescending()
 
-    private fun getSumOfTip(n: Int, tipList: List<Int>): Long {
-        var sumOfTip: Long = 0
-        for(i in 0 until n) {
-            var decidedTip = tipList[i] - (i+1 - 1)
-            if(decidedTip < 0)
-                decidedTip = 0
+        for(index in tipList.indices) {
+            val actualTip = tipList[index] - index // 원래는 순서 - 1 이지만 index 가 0 부터 시작이므로 (order-1)로 바로 사용 가능.
+            if(actualTip <= 0) // 내림차순으로 정렬했으므로 뒤의 팁들도 모두 0원처리가 돼서 의미없는 반복문을 종료한다.
+                break
 
-            sumOfTip += decidedTip
+            answerTip += actualTip
         }
-        return sumOfTip
+        print(answerTip)
     }
 }
 
