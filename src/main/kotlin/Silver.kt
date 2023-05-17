@@ -144,7 +144,7 @@ class Problem20115 {
     }
 }
 
-// Silver 2 - 35 min (Greedy)
+// Silver 2 - 35 min (Greedy) (resolve 20min)
 class Problem1541 {
     fun solve() {
         var answerSum = 0
