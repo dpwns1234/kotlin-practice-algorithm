@@ -178,35 +178,40 @@ class Problem1541 {
     }
 }
 
-// Silver 2 - 50 min (Greedy)
+// Silver 2 - 50 min (Greedy) (resolve 20min)
 class Problem16953 {
     fun solve() {
-        var answerCnt = 1
+        var answer = 1
         val str = readln().split(" ")
         val a = str[0].toInt()
         var b = str[1].toInt()
 
-        while(b > a) {
-            val lastNumber = b % 10 // 일의 자리 숫자 구하기
-            if(lastNumber == 1) { // 마지막 수가 1인 경우
-                b = b / 10 // 일의 자리 수 없애기
+        // a == b가 되면 변환 성공
+        while(a != b) {
+            // b가 a보다 작아지면 변환 실패
+            if (b < a){
+                answer = -1
+                break
             }
+            // 일의 자리가 1이냐
+            else if(b%10 == 1)
+                b /= 10
+            // 짝수냐
+            else if(b%2 == 0)
+                b /= 2
+            // 1이 아닌 홀수일 경우 변환 실패
             else {
-                if(b % 2 == 0)
-                    b /= 2
-                else
-                    break   // 2로 나눌 수 없을 경우 실패
+                answer = -1
+                break;
             }
-            answerCnt++
+            answer++
         }
 
-        // 결국 b를 a로 만드는데 성공했다면 성공!
-        if(a == b)
-            print(answerCnt)
-        else
-            print("-1")
+        print(answer)
     }
 }
+
+
 
 // Silver 1 - 1hour 30min (Greedy)
 class Problem1931 {
