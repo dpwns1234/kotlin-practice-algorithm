@@ -1,5 +1,5 @@
 
 fun main(args: Array<String>) {
-    val problem = Problem16953()
+    val problem = Problem1789()
     problem.solve()
 }

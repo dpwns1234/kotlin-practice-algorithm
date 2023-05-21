@@ -211,8 +211,6 @@ class Problem16953 {
     }
 }
 
-
-
 // Silver 1 - 1hour 30min (Greedy)
 class Problem1931 {
     fun solve() {
@@ -301,5 +299,34 @@ class Problem21314 {
         }
 
         return MKNumber.toString()
+    }
+}
+
+// Silver5 - 40min (Binary Search)
+class Problem1789 {
+    fun solve() {
+        val S = readln().toLong()
+        var start: Long = 1
+        var end: Long = S
+        var mid: Long = 0
+        while(end >= start) {
+            mid = (start+end)/2
+            val sigmaMid = mySum(mid)
+            if(sigmaMid < S) start = mid+1
+            else if(sigmaMid > S) end = mid-1
+            else {
+                print(mid)
+                return
+            }
+        }
+        print(end)
+    }
+
+    private fun mySum(n: Long): Long {
+        var sum: Long = 0
+        for(i in 1..n)
+            sum += i
+
+        return sum
     }
 }
