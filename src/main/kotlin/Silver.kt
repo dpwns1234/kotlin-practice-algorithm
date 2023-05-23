@@ -1,5 +1,8 @@
 import java.util.*
+import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 // Silver 2
 class Problem1874 {
@@ -362,6 +365,42 @@ class Problem10815 {
             else  return true // target을 찾은 경우
         }
         return false
+    }
+}
+
+// Silver3 - 40min (Binary Search유형이지만, 그냥 풀음)
+class Problem2512 {
+    fun solve() {
+        // input
+        val n = readln().toInt()
+        val str = readln().split(" ")
+        val requiredBudget = mutableListOf<Int>()
+        for(budget in str) {
+            requiredBudget.add(budget.toInt())
+        }
+        val totalBudget = readln().toInt()
+
+        requiredBudget.sortDescending() // 큰 순서대로 정렬
+        var maginotBudget = 0
+        var repeatNum = 0
+        var budgetSum = requiredBudget.sum()
+        for(maxBudget in requiredBudget) {
+            budgetSum += (maxBudget * repeatNum)
+            if(totalBudget >= budgetSum) { // 총예산이 더 많다 -> 여기까지 원하는만큼 줄 수 있다.
+                maginotBudget = maxBudget
+                break
+            }
+
+            repeatNum++
+            budgetSum -= (maxBudget*repeatNum) // -n번째 max
+        }
+        if(repeatNum == 0) {
+            print(maginotBudget)
+            return
+        }
+
+        val answerBudget = maginotBudget + (totalBudget - budgetSum) / repeatNum
+        print(answerBudget)
     }
 }
 
