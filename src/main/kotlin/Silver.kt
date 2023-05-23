@@ -330,3 +330,38 @@ class Problem1789 {
         return sum
     }
 }
+
+// Silver5 - 30min(Binary Search)
+class Problem10815 {
+    fun solve() {
+        val n = readln().toInt()
+        val str1 = readln().split(" ")
+        val firstSet = mutableSetOf<Int>()
+        for(i in 0 until n)
+            firstSet.add(str1[i].toInt())
+
+        val m = readln().toInt()
+        val str2 = readln().split(" ")
+        val secondList = mutableListOf<Int>()
+        for(i in 0 until m)
+            secondList.add(str2[i].toInt())
+
+        for(element in secondList) {
+            if(firstSet.contains(element)) print("1 ")
+            else print("0 ")
+        }
+    }
+
+    private fun binarySearch(list: List<Int>, target: Int): Boolean {
+        var start = 0
+        var end = list.lastIndex
+        while(start <= end) {
+            val mid = (start+end)/2
+            if(target > list[mid]) start = mid+1
+            else if (target < list[mid]) end = mid-1
+            else  return true // target을 찾은 경우
+        }
+        return false
+    }
+}
+
