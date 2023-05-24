@@ -404,3 +404,39 @@ class Problem2512 {
     }
 }
 
+// Silver2 - 2 hour (Binary Search)
+class Problem1654 {
+    fun solve() {
+        val str = readln().split(" ")
+        val K = str[0].toInt()
+        val N = str[1].toLong()
+        val lenList = mutableListOf<Int>()
+        for(i in 0 until K) {
+            lenList.add(readln().toInt())
+        }
+
+        var start:Long = 0
+        var end:Long = lenList.max().toLong() + 1 // mid가 0가 되는 상황을 막아줌.
+        while(start < end) {
+            val mid = (start+end) / 2
+            val countSum = calculateCountSum(lenList, mid)
+            if(countSum > N)
+                start = mid+1
+            else if(countSum < N)
+                end = mid
+            else {
+                start = mid+1
+            }
+        }
+
+        print(start-1)
+    }
+
+    private fun calculateCountSum(lenList: List<Int>, mid: Long): Long {
+        var cnt:Long = 0
+        for(len in lenList) {
+            cnt += (len / mid)
+        }
+        return cnt
+    }
+}
