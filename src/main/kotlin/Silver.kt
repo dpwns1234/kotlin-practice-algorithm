@@ -440,3 +440,48 @@ class Problem1654 {
         return cnt
     }
 }
+
+// Silver4 - 10min (Binary Search)
+class Problem1920 {
+    fun solve() {
+        val n = readln().toInt()
+        val str1 = readln().split(" ")
+        val nList = mutableListOf<Int>()
+        for(e in str1) {
+            nList.add(e.toInt())
+        }
+        val m = readln().toInt()
+        val mList = readln().split(" ")
+
+        nList.sort()
+        for(e in mList) {
+            if(isExist(nList, e.toInt())) println("1")
+            else println("0")
+        }
+    }
+
+    private fun isExist(nList: List<Int>, element: Int): Boolean {
+        var st = 0
+        var en = nList.lastIndex
+        while(st <= en) {
+            val mid = (st+en) / 2
+            if(nList[mid] > element) {
+                en = mid - 1
+            }
+            else if(nList[mid] < element) {
+                st = mid + 1
+            }
+            else {
+                return true
+            }
+        }
+        return false
+    }
+}
+
+// https://st-lab.tistory.com/267 ( 위의 문제 시리즈 문제, 링크 다 풀고 한 번 참고 )
+class Problem10816 {
+    fun solve() {
+
+    }
+}
