@@ -1,8 +1,4 @@
 import java.util.*
-import kotlin.math.ceil
-import kotlin.math.max
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 // Silver 2
 class Problem1874 {
@@ -480,8 +476,57 @@ class Problem1920 {
 }
 
 // https://st-lab.tistory.com/267 ( 위의 문제 시리즈 문제, 링크 다 풀고 한 번 참고 )
+// Silver2 - 3 hour (Binary Search)
 class Problem10816 {
     fun solve() {
+        // input
+        val n = readln().toInt()
+        val str1 = readln().split(" ")
+        val nList = mutableListOf<Int>()
+        for(e in str1) {
+            nList.add(e.toInt())
+        }
 
+        nList.sort()
+        val scr = Scanner(System.`in`)
+        val M: Int = scr.nextInt()
+
+        val sb = StringBuilder()
+
+        for (i in 0 until M) {
+            val key: Int = scr.nextInt()
+            sb.append(upperBoundBS(nList, key) - lowerBoundBS(nList, key)).append(' ')
+        }
+        println(sb)
+    }
+
+    private fun lowerBoundBS(nList: List<Int>, element: Int): Int {
+        var st = 0
+        var en = nList.size
+        while(st < en) {
+            val mid =  st + ((en - st) / 2)
+            if(nList[mid] < element) {
+                st = mid + 1
+            }
+            else if(nList[mid] >= element) {
+                en = mid
+            }
+        }
+        return st
+    }
+
+    private fun upperBoundBS(nList: List<Int>, element: Int): Int {
+        var st = 0
+        var en = nList.size
+        while(st < en) {
+            val mid =  st + ((en - st) / 2)
+            if(nList[mid] <= element) {
+                st = mid + 1
+            }
+            else if(nList[mid] > element) {
+                en = mid
+            }
+        }
+        return st
     }
 }
