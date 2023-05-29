@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.math.abs
 
 // Silver 2
 class Problem1874 {
@@ -528,5 +529,43 @@ class Problem10816 {
             }
         }
         return st
+    }
+}
+
+class Problem22871 {
+    fun solve() {
+        // input
+        val n = readln().toInt()
+        val str = readln().split(" ")
+        val aList = mutableListOf<Pair<Int, Int>>() // Pair(index, a)
+        for(i in str.indices) {
+            val a = str[i].toInt()
+            aList.add(Pair(i, a))
+        }
+
+        var startIndex = 0
+        var pairMinK: Pair<Int, Long>
+        var maxK = 0L
+        while(startIndex < aList.lastIndex) {
+            pairMinK = getMinKIndex(aList, startIndex)
+            if(pairMinK.second >= maxK)
+                maxK = pairMinK.second
+
+            startIndex = pairMinK.first
+        }
+        println(maxK)
+    }
+
+    private fun getMinKIndex(aList: List<Pair<Int, Int>>, startIndex: Int): Pair<Int, Long> {
+        var minK = 10000000L
+        var minIndex = startIndex
+        for(i in startIndex+1 until aList.size) {
+            val k: Long = 1L * (aList[i].first - startIndex) * (1 + abs(aList[i].second - aList[startIndex].second))
+            if(k < minK) {
+                minK = k
+                minIndex = i
+            }
+        }
+        return Pair(minIndex, minK)
     }
 }
