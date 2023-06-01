@@ -1,5 +1,6 @@
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.min
 
 // Silver 2
 class Problem1874 {
@@ -567,5 +568,23 @@ class Problem22871 {
             }
         }
         return Pair(minIndex, minK)
+    }
+}
+
+// Silver3 - 30min (Dynamic Programming) 해답 봄
+class Problem1463 {
+    fun solve() {
+        val x = readln().toInt()
+        val dpList = mutableListOf<Int>()
+        dpList.add(0)
+        dpList.add(0)
+        for(i in 2..x) {
+            dpList.add(dpList[i-1] + 1)
+            if(i % 2 == 0)
+                dpList[i] = min(dpList[i], dpList[i/2] + 1)
+            if(i % 3 == 0)
+                dpList[i] = min(dpList[i], dpList[i/3] + 1)
+        }
+        println(dpList[x])
     }
 }
