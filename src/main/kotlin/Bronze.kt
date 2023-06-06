@@ -55,3 +55,20 @@ class Problem14467 { // 13분
         print(moveCount)
     }
 }
+
+// Bronze 1 - 5min (DP)
+class Problem10870 {
+    fun solve() {
+        // Fn = Fn-1 + Fn-2 (n ≥ 2)
+        val n = readln().toInt()
+
+        val dp = Array<Long>(91) { 0 }
+        dp[0] = 0
+        dp[1] = 1
+        dp[2] = 1
+        for(i in 3..n) {
+            dp[i] = dp[i-1] + dp[i-2]
+        }
+        println(dp[n])
+    }
+}

@@ -1,5 +1,6 @@
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.min
 
 // Silver 2
@@ -586,5 +587,40 @@ class Problem1463 {
                 dpList[i] = min(dpList[i], dpList[i/3] + 1)
         }
         println(dpList[x])
+    }
+}
+
+class Problem2579 {
+    fun solve() {
+        val n = readln().toInt()
+        val stairs = mutableListOf<Int>()
+        for(i in 0 until n) {
+            stairs.add(readln().toInt())
+        }
+
+        var scoreSum = 0
+        var jumpStair = false
+        for(i in 0 until stairs.size - 3) { // -3의 이유는 i+2 때문에 -2, 마지막 계단은 무조건 밟아야하므로 제외햐서 -1 총 -3
+            if(jumpStair) {
+                jumpStair = false
+                continue
+            }
+            val sum1 = stairs[i] + stairs[i+1]
+            val sum2 = stairs[i] + stairs[i+2]
+            val max = max(sum1, sum2)
+            val sum3 = stairs[i+1] + stairs[i+2]
+
+            scoreSum += stairs[i] // 해당 계단 점수 + 해주기
+            if(max < sum3) // 건너뛰기
+                jumpStair = true
+        }
+
+        if(jumpStair) {
+            scoreSum += stairs[stairs.lastIndex-1]
+        }
+        else {
+            scoreSum += max(stairs[stairs.lastIndex], stairs[stairs.lastIndex-1])
+        }
+        println(scoreSum + stairs.last())
     }
 }
