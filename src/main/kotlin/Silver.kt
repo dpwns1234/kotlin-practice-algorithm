@@ -626,6 +626,7 @@ class Problem2579 {
     }
 }
 
+// Silver5
 class Problem1010 {
     fun solve() {
         val nRepeat = readln().toInt()
@@ -638,13 +639,12 @@ class Problem1010 {
     }
 
     private fun combination(n: Long, r: Long): Long {
-        var nCombination = 1L
-        var rCombination = 1L
-        for(i in 0 until r) {
-            nCombination *= (n-i)
-            rCombination *= (r-i)
+        var ret = 1L
+        repeat(r.toInt()) { r ->
+            ret *= (n-r)
+            ret /= r+1
         }
-        return nCombination / rCombination
+        return ret
     }
 }
 
