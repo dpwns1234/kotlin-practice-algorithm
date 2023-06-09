@@ -2,6 +2,7 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.properties.Delegates
 
 // Silver 2
 class Problem1874 {
@@ -622,5 +623,95 @@ class Problem2579 {
             scoreSum += max(stairs[stairs.lastIndex], stairs[stairs.lastIndex-1])
         }
         println(scoreSum + stairs.last())
+    }
+}
+
+class Problem1010 {
+    fun solve() {
+        val nRepeat = readln().toInt()
+        for(i in 0 until nRepeat) {
+            val str = readln().split(" ")
+            val n = str[0].toLong()
+            val m = str[1].toLong()
+            println(combination(m, n))
+        }
+    }
+
+    private fun combination(n: Long, r: Long): Long {
+        var nCombination = 1L
+        var rCombination = 1L
+        for(i in 0 until r) {
+            nCombination *= (n-i)
+            rCombination *= (r-i)
+        }
+        return nCombination / rCombination
+    }
+}
+
+// Silver1 - 40min (BFS)
+class Problem1926 {
+    private lateinit var vis: Array<Array<Int>>
+    private lateinit var paper: Array<Array<Int>>
+    private var row by Delegates.notNull<Int>()
+    private var col by Delegates.notNull<Int>()
+    fun solve() {
+
+        // input
+        val scr = Scanner(System.`in`)
+        row = scr.nextInt()
+        col = scr.nextInt()
+
+        paper = Array(row) { Array(col) {0} }
+        vis = Array(row) { Array(col) {0} }
+
+        for(i in 0 until row) {
+            for(j in 0 until col) {
+                paper[i][j] = scr.nextInt()
+            }
+        }
+
+        val drawingData = mutableListOf<Int>()
+        for(i in 0 until row) {
+            for(j in 0 until col) {
+                if(vis[i][j] == 1) continue // 방문한 건 패스
+                if(paper[i][j] == 0) continue // 그림이 그려지지 않은 곳이라면 패스
+                val drawingArea = getAreaUsingBfs(i, j)
+                drawingData.add(drawingArea)
+            }
+        }
+
+        if(drawingData.isEmpty()) {
+            println(0)
+            println(0)
+        }
+        else {
+            println(drawingData.size)
+            println(drawingData.max())
+        }
+    }
+
+    private fun getAreaUsingBfs(currentRow: Int, currentCol: Int): Int {
+        val dx = arrayOf(1, -1, 0, 0)
+        val dy = arrayOf(0, 0, -1, 1)
+
+        val queue = LinkedList<Pair<Int, Int>>()
+        var cnt = 1
+        vis[currentRow][currentCol] = 1
+        queue.add(Pair(currentRow, currentCol))
+
+        while(!queue.isEmpty()) {
+            val current = queue.pop()
+            for(i in 0 until 4) {
+                val nx = current.first + dx[i]
+                val ny = current.second + dy[i]
+                if(nx < 0 || nx >= row || ny < 0 || ny >= col) continue // paper의 범위를 넘지 않도록 조절
+                if(vis[nx][ny] == 1 || paper[nx][ny] == 0) continue     // 방문했거나 그려지지 않은(0) 경우 넘어가기
+
+                vis[nx][ny] = 1
+                queue.push(Pair(nx, ny))
+                cnt++ // 그림의 넓이 측정
+            }
+        }
+        return cnt
     }
 }
