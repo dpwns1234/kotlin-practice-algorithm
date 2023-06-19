@@ -212,6 +212,31 @@ class Problem16953 {
 
         print(answer)
     }
+
+    fun solve2() {
+        val str = readln().split(" ")
+        val a = str[0].toInt()
+        val b = str[1].toInt()
+
+        var value = b
+        var cnt = 1
+        while(value > a) {
+            if(value % 10 == 1) {
+                value /= 10
+            }
+            else if(value % 2 == 0) {
+                value /= 2
+            }
+            else {
+                print(-1)
+                return
+            }
+            cnt++
+        }
+
+        if(value == a) print(cnt)
+        else print(-1)
+    }
 }
 
 // Silver 1 - 1hour 30min (Greedy)
@@ -430,6 +455,35 @@ class Problem1654 {
         }
 
         print(start-1)
+    }
+
+    fun solve2() {
+        val str = readln().split(" ")
+        val k = str[0].toInt()
+        val n = str[1].toInt()
+        val lengths = mutableListOf<Int>()
+        repeat(k) {
+            lengths.add(readln().toInt())
+        }
+        lengths.sort()
+        val maxLength = upperBoundBS(lengths, n)
+        print(maxLength)
+    }
+
+    private fun upperBoundBS(lenList: List<Int>, n: Int): Long {
+        var st = 1L
+        var en: Long = lenList.last().toLong() + 1
+        while(st < en) {
+            val mid = (st + en) / 2L
+            val cnt = calculateCountSum(lenList, mid)
+            if(cnt < n) {
+                en = mid
+            }
+            else {
+                st = mid + 1
+            }
+        }
+        return st-1
     }
 
     private fun calculateCountSum(lenList: List<Int>, mid: Long): Long {
@@ -715,3 +769,108 @@ class Problem1926 {
         return cnt
     }
 }
+
+
+class Problem2178 {
+
+    private lateinit var miro: Array<Array<Int>>
+    private lateinit var vis: Array<Array<Int>>
+
+    fun solve() {
+        // input
+        val str = readln().split(" ")
+        val row = str[0].toInt()
+        val col = str[1].toInt()
+
+        miro = Array(row) { Array(col) {0} }
+        vis = Array(row) { Array(col) {0} }
+
+        for(i in 0 until row) {
+            val data = readln()
+            for(j in 0 until col) {
+                miro[i][j] = data[j].digitToInt()
+            }
+        }
+
+        bfs(row, col)
+        println(vis[row-1][col-1])
+    }
+
+    private fun bfs(row: Int, col: Int) {
+        val queue = LinkedList<Pair<Int, Int>>()
+        val dx = listOf(1, 0, 0, -1)
+        val dy = listOf(0, 1, -1, 0) // 동 남 북 서
+
+        vis[0][0] = 1
+        queue.add(Pair(0, 0))
+
+        while(!queue.isEmpty()) {
+            val current = queue.pop()
+            for(i in 0 until 4) {
+                val nx = dx[i] + current.first
+                val ny = dy[i] + current.second
+
+                if(nx == row-1 && ny == col-1) { // 도착지점인데, 방문한 이력이 있을 경우
+                    if(vis[nx][ny] >= 1)
+                        vis[nx][ny] = min(vis[nx][ny], vis[current.first][current.second]+1) // 도착지점 값을 최소값으로 변경
+                    else {
+                        vis[nx][ny] = vis[current.first][current.second] + 1 // 지금까지 이동해온 거리 + 1
+                    }
+                }
+                if(nx >= row || nx < 0 || ny >= col || ny < 0) continue
+                if(miro[nx][ny] == 0 || vis[nx][ny] >= 1) continue
+                vis[nx][ny] = vis[current.first][current.second] + 1 // 지금까지 이동해온 거리 + 1
+                queue.push(Pair(nx, ny))
+            }
+        }
+    }
+}
+
+// Silver2 - 25min (BS)
+class Problem2805 {
+    fun solve() {
+        val str = readln().split(" ")
+        val n = str[0].toInt()
+        val m = str[1].toInt()
+
+        val scr = Scanner(System.`in`)
+        val woodLengths = mutableListOf<Int>()
+        repeat(n) {
+            woodLengths.add(scr.nextInt())
+        }
+        woodLengths.sort()
+        val maxLength = upperBoundBS(woodLengths, m)
+        print(maxLength)
+
+    }
+    private fun upperBoundBS(woodLengths: List<Int>, m: Int): Int {
+        var st = 0
+        var en = woodLengths.last() + 1
+        while(st < en) {
+            val mid = (st + en) / 2
+            val extraLength = getExtraWoodLength(woodLengths, mid)
+            if(extraLength >= m) { // length 늘려야
+                st = mid + 1
+            }
+            else {
+                en = mid
+            }
+        }
+
+        return st - 1 // upper이기에 -1
+    }
+
+    private fun getExtraWoodLength(woodLengths: List<Int>, mid: Int): Long {
+        var sum = 0L
+        for(wood in woodLengths) {
+            if(wood - mid < 0) continue // 음수는 계산 x
+            sum += (wood - mid)
+        }
+        return sum
+    }
+}
+
+
+
+
+
