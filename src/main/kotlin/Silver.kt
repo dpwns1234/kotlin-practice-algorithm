@@ -1,4 +1,6 @@
 import java.util.*
+import kotlin.collections.ArrayDeque
+import kotlin.collections.HashMap
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -832,7 +834,6 @@ class Problem2805 {
         val str = readln().split(" ")
         val n = str[0].toInt()
         val m = str[1].toInt()
-
         val scr = Scanner(System.`in`)
         val woodLengths = mutableListOf<Int>()
         repeat(n) {
@@ -870,7 +871,90 @@ class Problem2805 {
     }
 }
 
+class Problem21608 {
+    fun solve() {
+        val scr = Scanner(System.`in`)
+        val likes = HashMap<Int, List<Int>>()
+        val n = readln().toInt()
+        for(row in 0 until n*n) {
+            var student = 0
+            val students = mutableListOf<Int>()
+            for(i in 0 until 5) {
+                if(i == 0) student = scr.nextInt()
+                students.add(scr.nextInt())
+            }
+            likes[student] = students
+        }
 
 
+    }
+
+    private fun first(n: Int): Pair<Int, Int> {
+        val position = Array(n*n) { Array(n*n) { 0 } }
+        val candidateCoords = mutableListOf<Pair<Int, Int>>()
+        val dx = arrayOf(0, 0, 1, -1) // 동서남북
+        val dy = arrayOf(1, -1, 0, 0)
+
+        for(row in 0 until n*n) {
+            for(col in 0 until n*n) {
+
+
+                for(i in 0 until 4) {
+                    val nx = dx[i] + row
+                    val ny = dy[i] + col
+                    if(nx >= n*n || ny >= n*n || nx < 0 || ny < 0) continue
+                    if(position[nx][ny] == 0) continue
+                }
+            }
+        }
+        return Pair<Int, Int>(1, 1)
+    }
+
+    private fun second() {
+
+    }
+
+    private fun third() {
+
+    }
+}
+
+// Silver4 - 40min (implementation)
+class Problem10994 {
+    lateinit var drawing: Array<CharArray>
+    fun solve() {
+        // 정사각형을 그려준다. 1, 5, 9, 13, y = n+4 의 사각형을 그려준다. (y=입력값, n은 전의 값.)
+        // 하나의 도화지를 만든다 생각. 그래서 큰 순서대로 차례로 그려나간다. 그리고 저장 후 다음 사각형을 그려나간다.
+        // 입력값에 따라 몇x몇 사각형인지 체크하고, 그에 맞는 2차원 배열의 저장공간을 만든다.
+        val n = readln().toInt()
+        val row = 4*(n-1) + 1
+        drawing = Array(row) { CharArray(row) {' '}}
+        var order = 0
+        for(i in n downTo 1) {
+            paintRect(i, order)
+            order += 2
+        }
+
+        for(i in 0 until row) {
+            for(j in 0 until row) {
+                print(drawing[i][j])
+            }
+            println()
+        }
+    }
+
+    private fun paintRect(n: Int, order: Int) {
+        val row = 4*(n-1) + 1
+        for (i in 0 until row) {
+            // 세로 변 그려주기
+            drawing[i + order][0 + order] = '*'
+            drawing[i + order][row - 1 + order] = '*'
+
+            // 위, 아래 가로 변 그려주기
+            drawing[0 + order][i + order] = '*'
+            drawing[row - 1 + order][i + order] = '*'
+        }
+    }
+}
 
 
