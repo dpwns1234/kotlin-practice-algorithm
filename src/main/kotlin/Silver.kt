@@ -921,15 +921,15 @@ class Problem21608 {
 
 // Silver4 - 40min (implementation)
 class Problem10994 {
-    lateinit var drawing: Array<CharArray>
+    private lateinit var drawing: Array<CharArray>
     fun solve() {
         // 정사각형을 그려준다. 1, 5, 9, 13, y = n+4 의 사각형을 그려준다. (y=입력값, n은 전의 값.)
         // 하나의 도화지를 만든다 생각. 그래서 큰 순서대로 차례로 그려나간다. 그리고 저장 후 다음 사각형을 그려나간다.
         // 입력값에 따라 몇x몇 사각형인지 체크하고, 그에 맞는 2차원 배열의 저장공간을 만든다.
         val n = readln().toInt()
         val row = 4*(n-1) + 1
+        var order = 0   // 큰 사각형부터 그릴 것이기에, 그릴 순서를 정하기 위한 변수
         drawing = Array(row) { CharArray(row) {' '}}
-        var order = 0
         for(i in n downTo 1) {
             paintRect(i, order)
             order += 2
@@ -947,7 +947,7 @@ class Problem10994 {
         val row = 4*(n-1) + 1
         for (i in 0 until row) {
             // 세로 변 그려주기
-            drawing[i + order][0 + order] = '*'
+            drawing[i + order][0 + order] = '*'          // order 변수를 통해 마치 사각형을 그릴 원점을 지정해주는 역할을 한다.
             drawing[i + order][row - 1 + order] = '*'
 
             // 위, 아래 가로 변 그려주기
