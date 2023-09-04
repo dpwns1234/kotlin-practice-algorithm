@@ -957,4 +957,82 @@ class Problem10994 {
     }
 }
 
+// Silver5 - 1 hour (Implementation)
+class Problem20546 {
+    fun solve() {
+        // 입력
+        val budge = readln().toInt()
+        val stocks = mutableListOf<Int>()
+        val str = readlnOrNull()?.split(" ")
+        for(stock in str!!) {
+            stocks.add(stock.toInt())
+        }
+
+        // bnp (살 수 있을 때 전부 사서 마지막 날에 팔기
+        val bnp = methodBNP(budge, stocks)
+        // timing (cnt변수 사용해서 상향, 하향 체크해서 전매도, 전매수하기)
+        // 여러번 매도 매수 할 수 있는 것 체크, 한 번도 못 살 수도 있는 거 체크
+        // 마지막날에는 떨어져도 사야함.
+        val timing = methodTIMING(budge, stocks)
+        if(bnp > timing)
+            println("BNP")
+        else if (bnp < timing)
+            println("TIMING")
+        else
+            println("SAMESAME")
+    }
+
+    private fun methodBNP(budge: Int, stocks: List<Int>): Int {
+        var count = 0   // 못 사면 0개 샀다는 걸 알려줌. (주식가격이 다 예산보다 비싼 경우)
+        var cash = budge
+        for(stock in stocks) {
+            if(cash >= stock) {    // 예산보다 주식이 더 싸면
+                count += (cash / stock)
+                cash -= (count * stock)
+            }
+        }
+
+        return cash + (count*stocks[13])
+    }
+
+    private fun methodTIMING(budge: Int, stocks: List<Int>): Int {
+        var totalCount = 0
+        var upCnt = 0
+        var downCnt = 0
+        var cash = budge
+
+        for(i in 1 until stocks.size) {
+            val stock = stocks[i]
+            if(stocks[i] > stocks[i-1]) {       // 전의 주식보다 가격이 상승함
+                upCnt++
+                downCnt = 0
+            }
+            else if (stocks[i] < stocks[i-1]) { // 전의 주식보다 가격이 하락함
+                upCnt = 0
+                downCnt++
+            }
+            else {
+                upCnt = 0
+                downCnt = 0
+            }
+
+            // 젠부 사야할 떄
+            if(downCnt >= 3) {
+                if(cash >= stock) {    // 예산보다 주식이 더 싸면 (= 살 수 있으면)
+                    val count = (cash / stock)
+                    cash -= (count * stock)
+                    totalCount += count
+                }
+            }
+
+            // 젠부 팔아야 할 때
+            if(upCnt >= 3 || i == 13) { // 마지막에 주식은 팔아야 하므로 i==13 조건 추가
+                cash += (totalCount * stocks[i])
+                upCnt = 0
+                totalCount = 0
+            }
+        }
+        return cash
+    }
+}
 
