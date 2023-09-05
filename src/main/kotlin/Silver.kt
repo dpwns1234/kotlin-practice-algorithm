@@ -1036,3 +1036,88 @@ class Problem20546 {
     }
 }
 
+// Silver4 - 45min (Implementation)
+class Problem2578 {
+    private val bingoCheckMap = Array(5) { Array(5) {false} }
+    private var bingoCnt = 0
+    fun solve() {
+        var ans = 0
+        val bingoMap = Array(5) { Array(5) {""} }
+        // 입력
+        for(i in 0 until 5) {
+            val input = readln().split(" ")
+            for(j in input.indices) {
+                bingoMap[i][j] = input[j]
+            }
+        }
+
+        for(i in 0 until 5) {
+            val input = readln().split(" ")
+            for(number in input) {
+                findNumber(number, bingoMap)
+                ans++
+                if(bingoCnt >= 3) {
+                    println(ans)
+                    return
+                }
+            }
+        }
+
+
+        // 빙고는 어떻게 체크할 것인가?
+        // 특이사항: 입력을 다 받고 체크할 수 있음
+        // 9번쨰부터 하나 둘 때마다 빙고체크를 한다. (단, 헀던 빙고는 넘어가는 로직이 필요함 -> 아니네 필요없네.)
+
+        // 2차원 배열로 만든다. -> 빙고 체크하기 수월
+        // 방문(체크)했는지 알 수 있는 변수가 필요하다. -> bool 2차원 배열을 만든다.
+        // 상하좌우, 대각선을 체크하는 함수를 만든다. (하나라도 false가 있으면 바로 리턴
+
+
+    }
+
+    private fun findNumber(target: String, bingoMap: Array<Array<String>>) {
+        for(i in bingoMap.indices) {
+            for(j in bingoMap.indices) {
+                if(bingoMap[i][j] == target) {
+                    bingoCheckMap[i][j] = true
+                    checkBingo(i, j)
+                    return
+                }
+            }
+        }
+    }
+
+    private fun checkBingo(row: Int, col: Int) {
+        var cnt = 0
+        // 좌우
+        for(i in 0 until 5) {
+            if(bingoCheckMap[row][i]) cnt++
+        }
+        if(cnt == 5) bingoCnt++
+        cnt = 0
+
+        // 상하
+        for(i in 0 until 5) {
+            if(bingoCheckMap[i][col]) cnt++
+        }
+        if(cnt == 5) bingoCnt++
+        cnt = 0
+
+        // 대각선
+        if(row == col) {
+            for(i in 0 until 5) {
+                if(bingoCheckMap[i][i]) cnt++
+            }
+            if(cnt == 5) bingoCnt++
+            cnt = 0
+        }
+
+        // 반대 대각선
+        if(row == 4-col || col == 4-row) {
+            for(i in 0 until 5) {
+                if(bingoCheckMap[i][4-i]) cnt++
+            }
+            if(cnt == 5) bingoCnt++
+        }
+    }
+}
