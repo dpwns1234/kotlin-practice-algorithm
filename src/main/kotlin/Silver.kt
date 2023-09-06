@@ -1121,3 +1121,62 @@ class Problem2578 {
         }
     }
 }
+
+// Silver4 - 1hour (Implementation) - 로직보다 출력 형식에서 실수해서 오래 걸림.
+class Problem1244 {
+    private lateinit var switchs: MutableList<String>
+    fun solve() {
+        // 입력
+        val n = readln().toInt()    // 스위치 수
+        switchs = readln().split(" ").toMutableList()
+        val m = readln().toInt()    // 학생 수
+
+        // 학생 수만큼 돌면서
+        repeat(m) {
+            val str = readln().split(" ")   // [0]=gender - [1]=number, ex) 1 3
+            val number = str[1].toInt()
+            // switch case로 남자 함수 / 여자 함수로 나눠서 바꿔줌.
+            when (str[0]) {
+                "1" -> man(number)
+                "2" -> woman(number - 1) // index로 보내주기
+            }
+        }
+
+        for(i in 0 until switchs.size) {
+            if(i % 20 == 0) println()
+            print(switchs[i] + " ")
+        }
+    }
+    private fun man(number: Int) {
+        // number의 배수를 바꿔준다. (단, index 처리(=-1) 해줘야 함.)
+        val index = number - 1
+        for(i in index until switchs.size step number) {
+            if(switchs[i] == "0") switchs[i] = "1"
+            else switchs[i] = "0"
+        }
+    }
+
+    private fun woman(index: Int) {
+        var downIndex = index
+        var upIndex = index
+        // 대칭으로 넓혀가면서 바꿔주기.
+        // 대칭이 맞지 않으면 return
+        // 단, index가 0보다 미만인지, size 이상인지 체크 먼저.
+        while(true) {
+            if(downIndex < 0 || upIndex >= switchs.size) return
+            if(switchs[downIndex] != switchs[upIndex]) return
+
+            // 반대로 바꿔주기
+            if(switchs[downIndex] == "0") {
+                switchs[upIndex] = "1"
+                switchs[downIndex] = "1"
+            } else {
+                switchs[upIndex] = "0"
+                switchs[downIndex] = "0"
+            }
+
+            downIndex -= 1
+            upIndex += 1
+        }
+    }
+}
