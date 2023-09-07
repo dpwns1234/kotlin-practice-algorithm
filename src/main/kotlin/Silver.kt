@@ -1,5 +1,4 @@
 import java.util.*
-import kotlin.collections.ArrayDeque
 import kotlin.collections.HashMap
 import kotlin.math.abs
 import kotlin.math.max
@@ -1242,5 +1241,68 @@ class Problem4396 {
         for(coord in boomCoord) {
             printMap[coord.first][coord.second] = '*'
         }
+    }
+}
+
+class Problem20436 {
+    private val keyboardCoord = mutableListOf<Pair<Char, Pair<Int, Int>>>()
+    private var leftFinger = ' '
+    private var rightFinger = ' '
+    fun solve() {
+        val keyboard = mutableListOf<String>()
+        keyboard.add("qwertyuiop")
+        keyboard.add("asdfghjkl ")
+        keyboard.add("zxcvbnm   ")
+
+        for(i in keyboard.indices) {
+            for(j in keyboard[i].indices) {
+                val c = keyboard[i][j]
+                val coord = Pair(i, j)
+                keyboardCoord.add(Pair(c, coord))
+            }
+        }
+
+        // 입력
+        val finger = readln().split(" ")
+        leftFinger = finger[0][0] // string -> char형으로 바꿔주기 위해 [][]
+        rightFinger = finger[1][0]
+        val str = readln()
+        // 반복문으로 주어진 문자열을 돌아가며
+        var distance = 0
+        for(c in str) {
+            // 모음(y, u, i, o, p, h, j, k, l, b, n, m)이면 오른손가락 좌표를 계산
+            if(isMoum(c)) {
+                distance += calculateDistance(rightFinger, c)
+                rightFinger = c
+            }
+            else {
+                distance += calculateDistance(leftFinger, c)
+                leftFinger = c
+            }
+        }
+        // 문자열 Length 더해주기 (누를 때 1초 소비)
+
+        println(distance + str.length)
+    }
+
+    private fun isMoum(target: Char): Boolean {
+        val moum = arrayOf('y', 'u', 'i', 'o', 'p', 'h', 'j', 'k', 'l', 'b', 'n', 'm')
+        for(c in moum) {
+            if(target == c) // 모음이면 true 리턴
+                return true
+        }
+        return false
+    }
+
+    private fun calculateDistance(finger: Char, target: Char): Int {
+        var fingerCoord = Pair(0, 0)
+        var targetCoord = Pair(0, 0)
+        for (key in keyboardCoord) {
+            val c = key.first
+            if (c == finger) fingerCoord = key.second
+            if (c == target) targetCoord = key.second
+        }
+
+        return abs(fingerCoord.first - targetCoord.first) + abs(fingerCoord.second - targetCoord.second)
     }
 }
