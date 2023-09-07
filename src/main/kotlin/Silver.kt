@@ -1180,3 +1180,67 @@ class Problem1244 {
         }
     }
 }
+
+// Silver4 - 1hour (Implementation)
+class Problem4396 {
+    private var problemMap = mutableListOf<String>()
+    private val boomCoord = mutableListOf<Pair<Int, Int>>() // 지뢰를 한 번에 표시할 수 있도록, 따로 출력할 변수를 만들어준다.
+    private val printMap = mutableListOf<StringBuilder>()
+    private var openTheBoom = false
+    fun solve() {
+        // 입력
+        val n = readln().toInt()
+        for(i in 0 until n) {
+            val str = readln()
+            problemMap.add(str)
+
+            // 지뢰를 밟았을 경우 모든 지뢰들을 표시해준다. (입력 받을 때, 좌표값 저장하기)
+            for(j in str.indices) {
+                if(str[j]=='*') boomCoord.add(Pair(i, j))
+            }
+
+            printMap.add(StringBuilder(str))
+        }
+
+        for(i in 0 until n) {
+            val line = readln()
+            for(j in 0 until n) {
+                // x일 경우, 자신을 둘러싼 인덱스를 모두 확인하고, 개수만큼 써준다. 그려준다. (함수)
+                if(line[j] == 'x') countBoom(i, j, n)
+                else printMap[i][j] = '.'
+            }
+        }
+        if(openTheBoom) drawBoom() // 지뢰를 밟았을 경우 처리
+
+        for(line in printMap) {
+            println(line)
+        }
+    }
+
+    private fun countBoom(row: Int, col: Int, size: Int) {
+        // 폭탄을 선택했을 경우 넘어가기
+        if(problemMap[row][col] == '*') {
+            openTheBoom = true
+            return
+        }
+
+        val dx = intArrayOf(0, 0, -1, 1, -1, 1, -1, 1) // 상하 좌우 + 대각
+        val dy = intArrayOf(-1, 1, 0, 0, -1, -1, 1, 1)
+        var boomCnt = 0
+        for(i in 0 until 8) {
+            val nx = col + dx[i]
+            val ny = row + dy[i]
+
+            // index 범위를 넘지 않게 예외처리 해준다.
+            if(nx < 0 || ny < 0 || nx >= size || ny >= size) continue
+            if(problemMap[ny][nx] == '*') boomCnt++
+        }
+        printMap[row][col] = boomCnt.digitToChar()
+    }
+
+    private fun drawBoom() {
+        for(coord in boomCoord) {
+            printMap[coord.first][coord.second] = '*'
+        }
+    }
+}
