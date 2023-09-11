@@ -1244,6 +1244,7 @@ class Problem4396 {
     }
 }
 
+// Silver4 - 45min (Implementation)
 class Problem20436 {
     private val keyboardCoord = mutableListOf<Pair<Char, Pair<Int, Int>>>()
     private var leftFinger = ' '
@@ -1306,3 +1307,82 @@ class Problem20436 {
         return abs(fingerCoord.first - targetCoord.first) + abs(fingerCoord.second - targetCoord.second)
     }
 }
+
+
+
+// 30분 + 15 + 15 + 15 + 15 + 15 + 5 ~
+class Problem1913 {
+    private val drawing = mutableListOf<MutableList<Int>>()
+    fun solve() {
+        // 입력
+        val n = readln().toInt()
+        val findingNum = readln().toInt()// 999^2
+        var findingNumCoord = Pair(0,0)
+
+        val drawing2 = Array(n){ Array(n) { 0 } }
+        // drawing 변수를 만들어서 규칙대로 값을 저장해준다.
+        // 마지막에 출력하면서 findingNum을 찾는 if문을 넣어서 좌표값을 저장한다. (findingNumCoord)
+
+        // 규칙 2
+        // 1. 큰 순서대로 값을 이어나간다. (= n*n)
+        // 2. for(i=n/2 ~ 0) { for(j=i*8 ~ 1) }
+        // 3. 첫번째 for문이 끝나면 현 좌표에서 x+1, y+1, 숫자는 이어가도록
+        // 4. 꺽는 기준은 nx, ny의 값이 배열 범위를 벗어나거나, 이미 숫자가 있을경우(처음 초기화할 때0으로 채워넣자.)
+        var x = 0
+        var y = 0
+        var number = n*n
+        val dx = arrayOf(0, 1, 0, -1) // 남 동 북 서
+        val dy = arrayOf(1, 0, -1, 0) // 남 동 북 서
+
+        // 테두리 개수 만큼 반복하는 반복문
+        for(i in n/2 downTo 0) {
+            var changeDirection = 0         // 방향을 꺾는 타이밍을 알려주는 변수
+            // 사각형 테두리를 그리는 반복문
+            for(j in i*8 downTo 1) {
+                // 끝에 와서 방향을 바꿔야할 때
+                if(x >= drawing2.size || y >= drawing2.size || x < 0 || y < 0 || drawing2[y][x] != 0) {
+                    // 우선 좌표를 제자리로 돌려놓는다.
+                    x -= dx[changeDirection]
+                    y -= dy[changeDirection]
+
+                    // 방향을 바꿔준다.
+                    changeDirection++
+                    // 제대로 된 방향으로 바꿔준다.
+                    x += dx[changeDirection]
+                    y += dy[changeDirection]
+                }
+
+                drawing2[y][x] = number--
+                // 좌표이동
+                x += dx[changeDirection]
+                y += dy[changeDirection]
+
+            }
+            // 새롭게 시작할 좌표를 지정 (0, 0) -> (1, 1)
+            x++
+            y++
+        }
+        drawing2[n/2][n/2] = 1
+        for(i in 0 until n) {
+            for(j in 0 until n) {
+                print("${drawing2[i][j]} ")
+
+                if(drawing2[i][j] == findingNum)
+                    findingNumCoord = Pair(i, j)
+            }
+            println()
+        }
+        println("${findingNumCoord.first + 1} ${findingNumCoord.second + 1}")
+    }
+}
+// 1 / 8 / 16 / 24 / 32
+
+// 1 1 1 1 1 1 1
+// 1 2 2 2 2 2 1
+// 1 2 3 3 3 2 1
+// 1 2 3 4 3 2 1
+// 1 2 3 3 3 2 1
+// 1 2 2 2 2 2 1
+// 1 1 1 1 1 1 1
+//
+//
