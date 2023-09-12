@@ -1310,7 +1310,7 @@ class Problem20436 {
 
 
 
-// 30분 + 15 + 15 + 15 + 15 + 15 + 5 ~
+// Silver3 - 2 hour (Implementation) / 마지막에 출력하는 것에서 시간초과 발생한 거였음. stringBuilder 사용해서 해결.
 class Problem1913 {
     private val drawing = mutableListOf<MutableList<Int>>()
     fun solve() {
@@ -1363,16 +1363,21 @@ class Problem1913 {
             y++
         }
         drawing2[n/2][n/2] = 1
+
+        val sb = StringBuilder("")
+        // 출력
         for(i in 0 until n) {
             for(j in 0 until n) {
-                print("${drawing2[i][j]} ")
-
                 if(drawing2[i][j] == findingNum)
                     findingNumCoord = Pair(i, j)
+
+                sb.append("${drawing2[i][j]} ")
             }
-            println()
+            sb.append("\n")
         }
-        println("${findingNumCoord.first + 1} ${findingNumCoord.second + 1}")
+        sb.append("${findingNumCoord.first + 1} ${findingNumCoord.second + 1}")
+
+        println(sb)
     }
 }
 // 1 / 8 / 16 / 24 / 32
