@@ -1,5 +1,4 @@
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -1380,14 +1379,41 @@ class Problem1913 {
         println(sb)
     }
 }
-// 1 / 8 / 16 / 24 / 32
 
-// 1 1 1 1 1 1 1
-// 1 2 2 2 2 2 1
-// 1 2 3 3 3 2 1
-// 1 2 3 4 3 2 1
-// 1 2 3 3 3 2 1
-// 1 2 2 2 2 2 1
-// 1 1 1 1 1 1 1
-//
-//
+class Problem12933 {
+    fun solve() {
+        // 1. 다 *로 바꿔주고, *****과 비교해서 같으면 종료해준다.
+        // 2.
+
+        // 입력
+        var crying = StringBuilder(readln())
+        var duckCnt = 0
+        val quack = "quack"
+        var index = 0
+        while(crying.isNotEmpty()) {
+            for(i in crying.indices) {
+                // q, u, a, c, k 순으로 지워나간다.
+                if(quack[index] == crying[i]) {
+                    crying[i] = '*'
+                    index++
+                }
+
+                // 만일, 'k'까지 지웠는데, 또 q로 시작한다면 다시금 위의 로직을 반복하며 문자열의 끝까지 간다.
+                index %= 5
+            }
+            // * 한 번 시작한 반복이 k로 끝나지 않으면 -1을 바로 리턴한다.
+            if(quack[index] != 'q') {
+                duckCnt = -1
+                break
+            }
+            // 그 자리에 특수 문자열을 세겨두고, 한 번에 지운다.
+            val tmp = crying.toString().replace("*", "")
+            crying = StringBuilder(tmp)
+
+            // 그렇게 문자열의 끝에 도달하면 오리 수를 증가시킨다.
+            duckCnt++
+        }
+
+        println(duckCnt)
+    }
+}
